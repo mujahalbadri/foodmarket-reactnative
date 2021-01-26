@@ -43,6 +43,11 @@ const styles = StyleSheet.create({
     marginTop: 24,
     flex: 1,
   },
+  photo: {
+    alignItems: 'center',
+    marginTop: 26,
+    marginBottom: 16,
+  },
   borderPhoto: {
     borderWidth: 1,
     borderColor: '#8D92A3',
@@ -52,11 +57,6 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  photo: {
-    alignItems: 'center',
-    marginTop: 26,
-    marginBottom: 16,
   },
   photoContainer: {
     padding: 24,
