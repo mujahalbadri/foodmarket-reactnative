@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Dimensions, Text, View} from 'react-native';
@@ -36,12 +37,19 @@ const renderTabBar = (props) => (
 
 const Account = () => {
   const navigation = useNavigation();
+  const signOut = () => {
+    AsyncStorage.multiRemove(['userProfile', 'token']).then(() => {
+      navigation.reset({index: 0, routes: [{name: 'SignIn'}]});
+    });
+  };
+
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       <ItemListMenu text="Edit Profile" />
       <ItemListMenu text="Home Address" />
       <ItemListMenu text="Security" />
       <ItemListMenu text="Payments" />
+      <ItemListMenu text="SignOut" onPress={signOut} />
     </View>
   );
 };

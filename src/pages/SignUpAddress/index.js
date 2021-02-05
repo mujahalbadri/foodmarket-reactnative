@@ -1,8 +1,9 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {Button, Gap, Header, Select, TextInput} from '../../components';
+import {setLoading, signUpAction} from '../../redux/action';
 import {useForm} from '../../utils';
-import {useSelector} from 'react-redux';
 
 const SignUpAddress = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -11,24 +12,26 @@ const SignUpAddress = ({navigation}) => {
     houseNumber: '',
     city: 'Jakarta',
   });
-  const registerReducer = useSelector((state) => state.registerReducer);
+  const dispatch = useDispatch();
+  const {registerReducer, photoReducer} = useSelector((state) => state);
 
   const onSubmit = () => {
-    console.log('form: ', form);
     const dataRegister = {
       ...form,
       ...registerReducer,
     };
-    console.log('data Register: ', dataRegister);
-    // navigation.replace('SuccessSignUp');
+    dispatch(setLoading(true));
+    // Send data register to API
+    dispatch(signUpAction(dataRegister, photoReducer, navigation));
   };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={styles.page}>
         <Header
           title="Address"
           subTitle="Make sure it's valid"
-          onBack={() => {}}
+          onBack={() => navigation.goBack()}
         />
         <View style={styles.container}>
           <TextInput
