@@ -1,10 +1,7 @@
 import axios from 'axios';
+import {API_HOST, APP_URL} from '../../config';
 import {showMessage, storeData} from '../../utils';
 import {setLoading} from './global';
-
-const API_HOST = {
-  url: 'http://10.0.2.2:8000/api',
-};
 
 export const signUpAction = (dataRegister, photoReducer, navigation) => (
   dispatch,
@@ -35,7 +32,7 @@ export const signUpAction = (dataRegister, photoReducer, navigation) => (
             },
           })
           .then((resUpload) => {
-            profile.profile_photo_url = `http://10.0.2.2:8000/storage/${resUpload.data.data[0]}`;
+            profile.profile_photo_url = `${APP_URL.url}/storage/${resUpload.data.data[0]}`;
             // Simpan storage data user
             storeData('userProfile', profile);
             navigation.reset({index: 0, routes: [{name: 'SuccessSignUp'}]});
@@ -77,7 +74,7 @@ export const signInAction = (form, navigation) => (dispatch) => {
 
       // Simpan storage data user
       if (profile.profile_photo_path != null) {
-        profile.profile_photo_url = `http://10.0.2.2:8000/storage/${res.data.data.user.profile_photo_path}`;
+        profile.profile_photo_url = `${APP_URL.url}/storage/${res.data.data.user.profile_photo_path}`;
       }
       storeData('userProfile', profile);
       navigation.reset({index: 0, routes: [{name: 'MainApp'}]});

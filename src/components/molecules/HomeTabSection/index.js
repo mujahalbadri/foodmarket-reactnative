@@ -1,10 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import {Dimensions, Text, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import {useDispatch, useSelector} from 'react-redux';
 import {ItemListFood} from '..';
-import {FoodDummy1, FoodDummy2, FoodDummy3, FoodDummy4} from '../../../assets';
-import {useNavigation} from '@react-navigation/native';
+import {getFoodDataByTypes} from '../../../redux/action';
 
 const renderTabBar = (props) => (
   <TabBar
@@ -37,80 +38,81 @@ const renderTabBar = (props) => (
 
 const NewTaste = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {newTaste} = useSelector((state) => state.homeReducer);
+
+  useEffect(() => {
+    dispatch(getFoodDataByTypes('new_food'));
+  });
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        image={FoodDummy1}
-        name={'Cherry Healthy'}
-        onPress={() => navigation.navigate('FoodDetail')}
-        rating={4.5}
-        price="289.000"
-      />
-      <ItemListFood
-        image={FoodDummy2}
-        name={'Avosalado'}
-        onPress={() => navigation.navigate('FoodDetail')}
-        rating={4.5}
-        price="289.000"
-      />
-      <ItemListFood
-        image={FoodDummy3}
-        name={'Kari Sleman'}
-        onPress={() => navigation.navigate('FoodDetail')}
-        rating={4.5}
-        price="289.000"
-      />
-      <ItemListFood
-        image={FoodDummy4}
-        name={'Kopi Kudda'}
-        onPress={() => navigation.navigate('FoodDetail')}
-        rating={4.5}
-        price="289.000"
-      />
+      {newTaste.map((item) => {
+        return (
+          <ItemListFood
+            key={item.id}
+            type="product"
+            image={{uri: item.picturePath}}
+            name={item.name}
+            onPress={() => navigation.navigate('FoodDetail', item)}
+            rating={item.rate}
+            price={item.price}
+          />
+        );
+      })}
     </View>
   );
 };
 
 const Popular = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {popular} = useSelector((state) => state.homeReducer);
+
+  useEffect(() => {
+    dispatch(getFoodDataByTypes('popular'));
+  });
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        image={FoodDummy2}
-        name={'Avosalado'}
-        onPress={() => navigation.navigate('FoodDetail')}
-        rating={4.5}
-        price="289.000"
-      />
-      <ItemListFood
-        image={FoodDummy3}
-        name={'Kari Sleman'}
-        onPress={() => navigation.navigate('FoodDetail')}
-        rating={4.5}
-        price="289.000"
-      />
+      {popular.map((item) => {
+        return (
+          <ItemListFood
+            key={item.id}
+            type="product"
+            image={{uri: item.picturePath}}
+            name={item.name}
+            onPress={() => navigation.navigate('FoodDetail', item)}
+            rating={item.rate}
+            price={item.price}
+          />
+        );
+      })}
     </View>
   );
 };
 
 const Recommended = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {recommended} = useSelector((state) => state.homeReducer);
+
+  useEffect(() => {
+    dispatch(getFoodDataByTypes('recommended'));
+  });
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        image={FoodDummy1}
-        name={'Cherry Healthy'}
-        onPress={() => navigation.navigate('FoodDetail')}
-        rating={4.5}
-        price="289.000"
-      />
-      <ItemListFood
-        image={FoodDummy4}
-        name={'Kopi Kudda'}
-        onPress={() => navigation.navigate('FoodDetail')}
-        rating={4.5}
-        price="289.000"
-      />
+      {recommended.map((item) => {
+        return (
+          <ItemListFood
+            key={item.id}
+            type="product"
+            image={{uri: item.picturePath}}
+            name={item.name}
+            onPress={() => navigation.navigate('FoodDetail', item)}
+            rating={item.rate}
+            price={item.price}
+          />
+        );
+      })}
     </View>
   );
 };
@@ -137,7 +139,7 @@ const HomeTabSection = () => {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      style={{backgroundColor: 'wh'}}
+      style={{backgroundColor: 'white', flex: 1}}
     />
   );
 };
