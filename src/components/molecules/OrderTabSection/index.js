@@ -1,10 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import {Dimensions, Text, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import {useDispatch, useSelector} from 'react-redux';
 import {ItemListFood} from '..';
-import {FoodDummy1, FoodDummy2, FoodDummy3, FoodDummy4} from '../../../assets';
-import {useNavigation} from '@react-navigation/native';
+import {getInProgress, getPastOrders} from '../../../redux/action';
 
 const renderTabBar = (props) => (
   <TabBar
@@ -37,67 +38,57 @@ const renderTabBar = (props) => (
 
 const InProgress = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {inProgress} = useSelector((state) => state.orderReducer);
+
+  useEffect(() => {
+    dispatch(getInProgress());
+  }, [dispatch]);
+
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        image={FoodDummy1}
-        name={'Cherry Healthy'}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="in-progress"
-        items={3}
-        price="289.000"
-      />
-      <ItemListFood
-        image={FoodDummy2}
-        name={'Avosalado'}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="in-progress"
-        items={2}
-        price="289.000"
-      />
-      <ItemListFood
-        image={FoodDummy3}
-        name={'Kari Sleman'}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="in-progress"
-        items={3}
-        price="289.000"
-      />
-      <ItemListFood
-        image={FoodDummy4}
-        name={'Kopi Kudda'}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="in-progress"
-        items={1}
-        price="289.000"
-      />
+      {inProgress.map((order) => {
+        return (
+          <ItemListFood
+            type="in-progress"
+            key={order.id}
+            name={order.food.name}
+            image={{uri: order.food.picturePath}}
+            items={order.quantity}
+            price={order.total}
+            onPress={() => navigation.navigate('OrderDetail', order)}
+          />
+        );
+      })}
     </View>
   );
 };
 
 const PastOrders = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {pastOrders} = useSelector((state) => state.orderReducer);
+
+  useEffect(() => {
+    dispatch(getPastOrders());
+  }, [dispatch]);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        image={FoodDummy2}
-        name={'Avosalado'}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="past-orders"
-        items={1}
-        price="289.000"
-        date="Jun 12, 14:00"
-      />
-      <ItemListFood
-        image={FoodDummy3}
-        name={'Kari Sleman'}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="past-orders"
-        items={1}
-        price="289.000"
-        date="Mei 2, 09:00"
-        status="Cancelled"
-      />
+      {pastOrders.map((order) => {
+        return (
+          <ItemListFood
+            type="past-orders"
+            key={order.id}
+            image={{uri: order.food.picturePath}}
+            name={order.food.name}
+            items={order.quantity}
+            price={order.total}
+            date={order.created_at}
+            status={order.status}
+            onPress={() => navigation.navigate('OrderDetail', order)}
+          />
+        );
+      })}
     </View>
   );
 };
@@ -122,7 +113,7 @@ const OrderTabSection = () => {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
-      style={{backgroundColor: 'wh'}}
+      style={{backgroundColor: 'white'}}
     />
   );
 };

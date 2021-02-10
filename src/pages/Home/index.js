@@ -10,7 +10,7 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     dispatch(getFoodData());
-  });
+  }, []);
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={styles.page}>

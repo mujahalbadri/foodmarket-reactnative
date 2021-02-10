@@ -1,13 +1,20 @@
-import React from 'react';
-import {useState} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {EmptyOrder, Header, OrderTabSection} from '../../components/molecules';
+import {getOrders} from '../../redux/action';
 
-const Oreder = () => {
-  const [isEmpty] = useState(false);
+const Order = () => {
+  const dispatch = useDispatch();
+  const {orders} = useSelector((state) => state.orderReducer);
+
+  useEffect(() => {
+    dispatch(getOrders());
+  }, [dispatch]);
+
   return (
     <View style={styles.page}>
-      {isEmpty ? (
+      {orders.length < 1 ? (
         <EmptyOrder />
       ) : (
         <View style={styles.content}>
@@ -21,7 +28,7 @@ const Oreder = () => {
   );
 };
 
-export default Oreder;
+export default Order;
 
 const styles = StyleSheet.create({
   page: {flex: 1, backgroundColor: 'white'},

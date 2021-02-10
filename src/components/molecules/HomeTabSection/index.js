@@ -43,7 +43,7 @@ const NewTaste = () => {
 
   useEffect(() => {
     dispatch(getFoodDataByTypes('new_food'));
-  });
+  }, []);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       {newTaste.map((item) => {
@@ -70,7 +70,7 @@ const Popular = () => {
 
   useEffect(() => {
     dispatch(getFoodDataByTypes('popular'));
-  });
+  }, []);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       {popular.map((item) => {
@@ -97,7 +97,7 @@ const Recommended = () => {
 
   useEffect(() => {
     dispatch(getFoodDataByTypes('recommended'));
-  });
+  }, []);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       {recommended.map((item) => {
