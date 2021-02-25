@@ -1,7 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import {useState} from 'react';
+import {Dimensions, RefreshControl, ScrollView, Text, View} from 'react-native';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {useDispatch, useSelector} from 'react-redux';
 import {ItemListFood} from '..';
@@ -41,26 +42,39 @@ const InProgress = () => {
   const dispatch = useDispatch();
   const {inProgress} = useSelector((state) => state.orderReducer);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     dispatch(getInProgress());
   }, [dispatch]);
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(getInProgress());
+    setRefreshing(false);
+  };
+
   return (
-    <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      {inProgress.map((order) => {
-        return (
-          <ItemListFood
-            type="in-progress"
-            key={order.id}
-            name={order.food.name}
-            image={{uri: order.food.picturePath}}
-            items={order.quantity}
-            price={order.total}
-            onPress={() => navigation.navigate('OrderDetail', order)}
-          />
-        );
-      })}
-    </View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      <View style={{paddingTop: 8, paddingHorizontal: 24}}>
+        {inProgress.map((order) => {
+          return (
+            <ItemListFood
+              type="in-progress"
+              key={order.id}
+              name={order.food.name}
+              image={{uri: order.food.picturePath}}
+              items={order.quantity}
+              price={order.total}
+              onPress={() => navigation.navigate('OrderDetail', order)}
+            />
+          );
+        })}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -69,27 +83,40 @@ const PastOrders = () => {
   const dispatch = useDispatch();
   const {pastOrders} = useSelector((state) => state.orderReducer);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     dispatch(getPastOrders());
   }, [dispatch]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(getPastOrders());
+    setRefreshing(false);
+  };
   return (
-    <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      {pastOrders.map((order) => {
-        return (
-          <ItemListFood
-            type="past-orders"
-            key={order.id}
-            image={{uri: order.food.picturePath}}
-            name={order.food.name}
-            items={order.quantity}
-            price={order.total}
-            date={order.created_at}
-            status={order.status}
-            onPress={() => navigation.navigate('OrderDetail', order)}
-          />
-        );
-      })}
-    </View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      <View style={{paddingTop: 8, paddingHorizontal: 24}}>
+        {pastOrders.map((order) => {
+          return (
+            <ItemListFood
+              type="past-orders"
+              key={order.id}
+              image={{uri: order.food.picturePath}}
+              name={order.food.name}
+              items={order.quantity}
+              price={order.total}
+              date={order.created_at}
+              status={order.status}
+              onPress={() => navigation.navigate('OrderDetail', order)}
+            />
+          );
+        })}
+      </View>
+    </ScrollView>
   );
 };
 

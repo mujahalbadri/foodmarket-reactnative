@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {Text} from 'react-native';
 import NumberFormat from 'react-number-format';
 
 const Number = ({number, type, style}) => {
@@ -28,5 +28,3 @@ const Number = ({number, type, style}) => {
 };
 
 export default Number;
-
-const styles = StyleSheet.create({});

@@ -55,7 +55,6 @@ const Account = () => {
 };
 
 const FoodMarket = () => {
-  const navigation = useNavigation();
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       <ItemListMenu text="Rate App" />
